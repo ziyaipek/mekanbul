@@ -28,22 +28,25 @@ const yorumGetir = function(req,res){
                 yorum = mekan.yorumlar.id(req.params.yorumid);
                 if(!yorum){
                     cevapOlustur(res,404,{
-                        "hata": "Böyle bir mekan yok!"
+                        "hata": "Böyle bir yorum yok!"
                     });
                 }
-            }   
-            else{
-                cevap = {
-                    mekan: {
-                        ad: mekan.ad,
-                        id: req.params.mekanid,
-                    },
-                    yorum: yorum,
-                };
-                cevapOlustur(res,404,{
-                    "hata": "Hiç yorum yok",
-                });
-            }  
+                else{
+                    cevap = {
+                        mekan: {
+                            ad: mekan.ad,
+                            id: req.params.mekanid,
+                        },
+                        yorum: yorum,
+                    };
+                    cevapOlustur(res,200,cevap);
+                }
+                   
+             }  else{   cevapOlustur(res,404,{
+                "hata": "Hiç yorum yok",
+            });  
+        }   
+            
         });
     } 
     else{
@@ -51,7 +54,7 @@ const yorumGetir = function(req,res){
             "hata":"Bulunamadı. mekanid ve yorumid mutlaka girilmeli."
         });
     }
-}
+};
 
 const yorumGuncelle = function(req,res){
     cevapOlustur(res,200,{"durum":"başarılı"});
