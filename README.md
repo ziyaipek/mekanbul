@@ -1,9 +1,9 @@
 # MekanBul REST API Testleri
 1. Thunder API
-2. ![Thunder API ile Test](./resimler/Koleksiyon%20Run%20All%20Sonucu.jpg)
-3. 
-4. test.js
-5. ![test.js ile Test](./resimler/testjs.jpg)
+![Thunder API ile Test](./resimler/Koleksiyon%20Run%20All%20Sonucu.jpg)
+
+2. test.js
+![test.js ile Test](./resimler/testjs.jpg)
 
 # MekanBul REST API Adresleri
 
