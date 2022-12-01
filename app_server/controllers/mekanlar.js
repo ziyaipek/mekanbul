@@ -1,34 +1,59 @@
 var express = require('express');
 var router = express.Router();
+const axios = require("axios");
 
+var apiSecenekleri={
+    sunucu: "http://localhost:3000",
+    apiYolu: "/api/mekanlar/",
+};
 
+var mesafeyiFormatla=(mesafe)=>{
+    var yeniMesafe, birim;
+    if(mesafe > 1){
+        yeniMesafe= parseFloat(mesafe).toFixed(1);
+        birim="km";
+    }else{
+        yeniMesafe = parseInt(mesafe * 1000, 10);
+        birim= " m";
+    }
+    return yeniMesafe + birim;
+};
+
+var anaSayfaOlustur=function(res,mekanListesi){
+    var mesaj;
+    if(!(mekanListesi instanceof(Array))){
+        mesaj="API HATASI:Birşeyler ters gitti.";
+        mekanListesi=[];
+    }else{
+        if(!mekanListesi.length){
+            mesaj="Civarda herhangi bir mekan yok";
+        }
+    }
+    res.render("anasayfa",{
+        "baslik":"Anasayfa",
+        "sayfaBaslik":{
+            "siteAd":"Mekanbul",
+            "slogan":"Mekanları Keşfet"
+        }
+    })
+}
 
 const anaSayfa = function(req, res, next) {
-    res.render('anasayfa', {
-        "baslik": "Ana Sayfa",
-        "sayfaBaslik": {
-            "siteAd": "MekanBul",
-            "slogan": "Civardaki Mekanları Keşfet!"
-        },
-        "mekanlar": [
-            {
-                "ad": "Starbucks",
-                "adres": "Centrum Garden AVM",
-                "puan": "4",
-                "imkanlar": ["Dünya Kahveleri", "Kekler", "Pastalar"],
-                "mesafe": "10km"
-            }
-            ,
-            {
-                "ad": "Gloria Jeans",
-                "adres": "SDU Doğu Kampüsü",
-                "puan": "3",
-                "imkanlar": ["Kahve", "Çay", "Pasta"],
-                "mesafe": "5km"
-            }
-        ]
-    }
-    );
+    axios.get().apiSecenekleri.sunucu+apiSecenekleri.apiYolu,{
+        params:{
+            enlem:req.query.enlem,
+            boylam:req.query.boylam
+        }
+    }.then(function(response){
+        var i,mekanlar;
+        mekanlar=response.data;
+        for(i=0;i<mekanlar.length;i++){
+            mekanlar[i].mesafe=mesafeyiFormatla(mekanlar[i].mesafe);
+        }
+        anaSayfaOlustur(res,mekanlar);
+    }).catch(function(hata){
+        anaSayfaOlustur(res,hata);
+    });
 }
 
 
