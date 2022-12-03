@@ -5,12 +5,12 @@ const cevapOlustur = (res, status, content) => {
   res.status(status).json(content);
 };
 
-var cevrimler = (() => {
-  var dunyaYariCap = 6371; //km
-  var radyan2Kilometre = (radyan) => {
+var cevrimler = (function () {
+  var dunyaYariCap = 6371; 
+  var radyan2Kilometre = function (radyan) {
     return parseFloat(radyan * dunyaYariCap);
   };
-  var kilometre2Radyan = (mesafe) => {
+  var kilometre2Radyan = function (mesafe) {
     return parseFloat(mesafe / dunyaYariCap);
   };
   return {
@@ -19,7 +19,7 @@ var cevrimler = (() => {
   };
 })();
 
-const mekanlariListele = async (req, res) => {
+const mekanlariListele = async function (req, res)  {
   var boylam = parseFloat(req.query.boylam);
   var enlem = parseFloat(req.query.enlem);
 
@@ -48,7 +48,7 @@ const mekanlariListele = async (req, res) => {
       },
     ]);
 
-    const mekanlar = sonuc.map((mekan) => {
+    const mekanlar = sonuc.map(function (mekan) {
       return {
         mesafe: cevrimler.kilometre2Radyan(mekan.mesafe),
         ad: mekan.ad,
@@ -64,7 +64,7 @@ const mekanlariListele = async (req, res) => {
   }
 };
 
-const mekanEkle = (req, res) => {
+const mekanEkle = function (req, res)  {
   Mekan.create(
     {
       ad: req.body.ad,
@@ -86,7 +86,7 @@ const mekanEkle = (req, res) => {
         },
       ],
     },
-    (hata, mekan) => {
+    function (hata, mekan) {
       if (hata) {
         cevapOlustur(res, 400, hata);
       } else {
@@ -96,9 +96,9 @@ const mekanEkle = (req, res) => {
   );
 };
 
-const mekanGetir = (req, res) => {
+const mekanGetir = function (req, res)  {
   if (req.params && req.params.mekanid) {
-    Mekan.findById(req.params.mekanid).exec((hata, mekan) => {
+    Mekan.findById(req.params.mekanid).exec(function (hata, mekan) {
       if (!mekan) {
         cevapOlustur(res, 404, { hata: "Böyle bir mekan yok!" });
       } else if (hata) {
@@ -112,14 +112,14 @@ const mekanGetir = (req, res) => {
   }
 };
 
-const mekanGuncelle = (req, res) => {
+const mekanGuncelle = function (req, res) {
   if (!req.params.mekanid) {
     cevapOlustur(res, 404, { mesaj: "Bulunamadı, mekanid gerekli" });
     return;
   } // - işareti yorumlar ve puan dışında her şeyi almamızı söyler
   Mekan.findById(req.params.mekanid)
     .select("-yorumlar -puan")
-    .exec((hata, gelenMekan) => {
+    .exec(function (hata, gelenMekan)  {
       if (!gelenMekan) {
         cevapOlustur(res, 404, { mesaj: "mekanid bulunamadı" });
         return;
@@ -148,7 +148,7 @@ const mekanGuncelle = (req, res) => {
           kapali: req.body.kapali2,
         },
       ];
-      gelenMekan.save((hata, mekan) => {
+      gelenMekan.save(function (hata, mekan)  {
         if (hata) {
           cevapOlustur(res, 404, hata);
         } else {
@@ -158,10 +158,10 @@ const mekanGuncelle = (req, res) => {
     });
 };
 
-const mekanSil = (req, res) => {
+const mekanSil = function (req, res)  {
   var mekanid = req.params.mekanid;
   if (mekanid) {
-    Mekan.findByIdAndRemove(mekanid).exec((hata, gelenMekan) => {
+    Mekan.findByIdAndRemove(mekanid).exec(function (hata, gelenMekan) {
       if (hata) {
         cevapOlustur(res, 404, hata);
         return;
