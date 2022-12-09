@@ -113,7 +113,7 @@ const yorumumuEkle=function(req,res){
         gonderilenYorum={
             yorumYapan:req.body.adsoyad,
             puan:req.body.puan,
-            yorum:req.body.yorum
+            yorumMetni:req.body.yorum
         }
         axios.post(apiSecenekleri.sunucu+apiSecenekleri.apiYolu+mekanid+"/yorumlar",gonderilenYorum).then(function(){
             res.redirect("/mekan/"+mekanid);
