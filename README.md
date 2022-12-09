@@ -1,6 +1,8 @@
+https://mekanbul.ziyaipek1.repl.co/?enlem=37&boylam=35
+
 # MekanBul REST API Testleri
 1. Thunder API
-![Thunder API ile Test](./resimler/Koleksiyon%20Run%20All%20Sonucu.jpg)
+![Thunder API ile Test](./resimler/runall.jpg)
 
 2. test.js
 
